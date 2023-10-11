@@ -367,7 +367,11 @@ def like_song(request, song_id):
         liked = True
 
     like_count = song.liked_by_users.count()
-    
+
+    # Update the like count in the song model
+    song.like_count = like_count
+    song.save()
+
     return JsonResponse({'liked': liked, 'like_count': like_count})
 
 
