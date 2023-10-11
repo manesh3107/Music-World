@@ -146,6 +146,10 @@
       background-color: gray;
       color: #000;
     }
+
+    .fa_custom {
+      color: red
+    }
   </style>
 
   {% block header %}{% endblock header %}
@@ -231,6 +235,48 @@
       removeMessages();
     });
   </script>
+ <script>
+  function toggleLikeState(songId) {
+      fetch(`/like/${songId}/`)
+          .then(response => response.json())
+          .then(data => {
+              const likeButton = document.querySelector('.like-button');
+              const likeCountElement = document.getElementById(`like-count-${songId}`);
+              if (data.liked) {
+                  likeButton.innerHTML = '<i class="fa fa-heart fa_custom fa-2x"></i>'; // Display heart icon for "Liked"
+              } else {
+                  likeButton.innerHTML = '<i class="fa fa-heart fa-2x"></i>'; // Display heart icon for "Not Liked"
+              }
+              likeCountElement.textContent = data.like_count;
+          })
+          .catch(error => {
+              console.error("Error:", error);
+          });
+  }
+  
+  document.querySelectorAll('.like-button').forEach(button => {
+      button.addEventListener('click', function () {
+          const songId = this.getAttribute('data-song-id');
+          if (songId) {
+              toggleLikeState(songId);
+          } else {
+              console.error("Invalid songId");
+          }
+      });
+  });
+
+  // Double-click event listener on the main card
+  document.querySelector('.doublee').addEventListener('dblclick', function () {
+      const songId = this.getAttribute('data-song-id');
+      if (songId) {
+          toggleLikeState(songId);
+      } else {
+          console.error("Invalid songId");
+      }
+  });
+</script>
+
+
 
   {% block js %}{% endblock js %}
 </body>

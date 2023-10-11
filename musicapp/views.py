@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
-from django.db.models import Q
+from django.db.models import Q,F
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.db.models import Count
+from django.db import connection
 
 
 # Create your views here.
@@ -64,6 +67,9 @@ def index(request):
         context = {'all_songs': filtered_songs,
                    'last_played': last_played_song, 'query_search': True}
         return render(request, 'musicapp/index.html', context)
+    
+    # Subquery to get the most liked songs
+    songs_with_likes = Song.objects.annotate(like_counts=Count('like_count')).order_by('-like_count')[:6]
 
     context = {
         'all_songs': indexpage_songs,
@@ -72,10 +78,11 @@ def index(request):
         'english_songs': indexpage_english_songs,
         'last_played': last_played_song,
         'first_time': first_time,
+        'most_liked_songs': songs_with_likes,
         'query_search': False,
     }
-    return render(request, 'musicapp/index.html', context=context)
 
+    return render(request, 'musicapp/index.html', context)
 
 def hindi_songs(request):
     hindi_songs = Song.objects.filter(language='Hindi')
@@ -342,3 +349,25 @@ def favourite(request):
         messages.success(request, "Removed from favourite!")
     context = {'songs': songs}
     return render(request, 'musicapp/favourite.html', context=context)
+
+
+from django.http import JsonResponse
+
+def like_song(request, song_id):
+    song = get_object_or_404(Song, pk=song_id)
+    user = request.user
+
+    if user in song.liked_by_users.all():
+        # User has already liked the song, so unlike it
+        song.liked_by_users.remove(user)
+        liked = False
+    else:
+        # User has not liked the song, so like it
+        song.liked_by_users.add(user)
+        liked = True
+
+    like_count = song.liked_by_users.count()
+    
+    return JsonResponse({'liked': liked, 'like_count': like_count})
+
+

@@ -25,14 +25,13 @@
 {% endif %}
 <br>
 <div class="container">
-    <div class="card">
+    <div class="card doublee" data-song-id="{{ songs.id }}">
         <div class="container-fliud">
             <div class="wrapper row">
                 <div class="preview col-md-5">
 
-                    <div class="preview-pic tab-content">
-                        <div class="tab-pane active"><img src="{{songs.song_img.url}}" height="300" width="300"
-                                style="padding:20px;border-radius: 60px 60px 60px 60px;"></div>
+                    <div class="preview-pic img tab-content">
+                        <div class="tab-pane active"><img src="{{songs.song_img.url}}" height="300" width="300" style="padding:20px;border-radius: 60px 60px 60px 60px;"/></div>
                     </div>
 
                 </div>
@@ -116,7 +115,14 @@
 
                         {% endif %}
                     </form>
-
+                    <p>Likes: <span id="like-count-{{ songs.id }}">{{ songs.liked_by_users.count }}</span></p>
+                    <a class="like-button" data-song-id="{{ songs.id }}">
+                        {% if request.user in songs.liked_by_users.all %}
+                        <i class="fa fa-heart fa_custom fa-2x"></i>
+                        {% else %}
+                        <i class="fa fa-heart fa-2x"></i>
+                        {% endif %}
+                    </a>
                 </div>
             </div>
         </div>
@@ -147,5 +153,8 @@
         </div>
     </div>
 </footer>
+
+
+
 
 {% endblock body %}

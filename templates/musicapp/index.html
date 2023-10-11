@@ -94,6 +94,34 @@
   <br>
   <br>
 
+    <!-- Hindi Songs -->
+    {% if not query_search %}
+    <header class="section-heading mt-4">
+      <h5 class="section-title" style="color: white;">MOST POPULAR SONGS</h5>
+    </header>
+    <hr>
+    {% endif %}
+    <!-- Song list -->
+    <div class="row" style="margin-right: -15px; margin-left: -15px;">
+      {% if most_liked_songs %}
+      {% for song in most_liked_songs %}
+      <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
+        <div class="hovereffect">
+          <img src="{{ song.song_img.url }}" class="img-responsive" height="165" width="165" style="border-radius: 8px;">
+          <div class="overlay">
+            <a class="btn btn-outline-light mt-3 mx-1" href="{% url 'play_song_index' song.id %}"><i class="fa fa-play"
+                aria-hidden="true"></i></a>
+            <a class="btn btn-outline-light mt-3 mx-1" href="{% url 'detail' song.id %}"><i class="fa fa-info-circle"
+                aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    <br>
+    <br>
+
   <!-- Hindi Songs -->
   {% if not query_search %}
   <header class="section-heading mt-4">

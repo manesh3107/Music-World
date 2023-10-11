@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+User._meta.get_field('email')._unique=True
 
 
 # Create your models here.
@@ -17,7 +18,8 @@ class Song(models.Model):
     year = models.IntegerField()
     singer = models.CharField(max_length=200)
     song_file = models.FileField()
-
+    like_count = models.IntegerField(default=0)
+    liked_by_users = models.ManyToManyField(User, related_name='liked_songs')
 
 
 
@@ -37,6 +39,11 @@ class Favourite(models.Model):
     
 
 class Recent(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    song = models.ForeignKey(Song, on_delete=models.CASCADE)
+
+
+class UserLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     song = models.ForeignKey(Song, on_delete=models.CASCADE)
 

@@ -23,8 +23,10 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
 
+
 class RegistrationForm(UserCreationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'Username'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'placeholder': 'Email'}))  # Add an email field
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'placeholder': 'Enter Password'}))
     password2 = forms.CharField(
         label='Password confirmation',
@@ -33,10 +35,12 @@ class RegistrationForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password1', 'password2', ]
+        fields = ['username', 'email', 'password1', 'password2']  # Include 'email' field in the form
 
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']  # Save the email from the form
         if commit:
             user.save()
         return user
+
