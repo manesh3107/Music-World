@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'rbh8%u_$en!zodi6j_ual3azei=2(@yd1zrl7n0kz^t!xe$t2o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -63,6 +63,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://musicplayer','https://musicworld.up.railway.app/'
 ]
 
 ROOT_URLCONF = 'musicplayer.urls'
