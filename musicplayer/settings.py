@@ -27,6 +27,7 @@ SECRET_KEY = 'rbh8%u_$en!zodi6j_ual3azei=2(@yd1zrl7n0kz^t!xe$t2o'
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ['https://musicworld.up.railway.app']
 
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
 # Application definition
@@ -65,9 +66,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware'
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://musicplayer','https://musicworld.up.railway.app/'
-]
+CSRF_TRUSTED_ORIGINS = ['https://musicworld.up.railway.app']
 
 ROOT_URLCONF = 'musicplayer.urls'
 
